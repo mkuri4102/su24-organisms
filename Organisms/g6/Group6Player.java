@@ -3,6 +3,7 @@ package organisms.g6;
 import organisms.Move;
 import organisms.ui.OrganismsGame;
 import organisms.OrganismsPlayer;
+import organisms.ui.ParseValue;
 
 import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,11 +13,16 @@ public class Group6Player implements OrganismsPlayer {
     private int dna;
     private ThreadLocalRandom random;
 
+    private int M ;
+    private int v ;
+    //ParseValue.parseIntegerValue(properties.getProperty("M"));
     @Override
     public void register(OrganismsGame game, int dna) throws Exception {
         this.game = game;
         this.dna = dna;
         this.random = ThreadLocalRandom.current();
+        this.M = game.M();
+        this.v = game.v();
 
     }
 
