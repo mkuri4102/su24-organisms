@@ -46,15 +46,15 @@ public class Group6Player implements OrganismsPlayer {
             return reproduce(neighborN, neighborE, neighborS, neighborW);
         }
         //else if less energy
-            // if there is food on the cell stay in that cell and eating food
-            // else move to place with food or move randomly
-       else{
-           if(foodHere > 0){
-               return Move.movement(Action.STAY_PUT);
-           }
-           else{
-               return moveToFoodOrRandom(foodN, foodE, foodS, foodW, energyLeft);
-           }
+        // if there is food on the cell stay in that cell and eating food
+        // else move to place with food or if no food around then move randomly
+        else{
+            if(foodHere > 0){
+                return Move.movement(Action.STAY_PUT);
+            }
+            else{
+                return moveToFoodOrRandom(foodN, foodE, foodS, foodW, neighborN, neighborE, neighborS, neighborW, energyLeft);
+            }
 
         }
 
@@ -81,27 +81,36 @@ public class Group6Player implements OrganismsPlayer {
     }
 
     private Move reproduce(int neighborN, int neighborE, int neighborS, int neighborW) {
-        if (neighborN == -1) return Move.reproduce(Action.NORTH, random.nextInt());
-        if (neighborE == -1) return Move.reproduce(Action.EAST, random.nextInt());
-        if (neighborS == -1) return Move.reproduce(Action.SOUTH, random.nextInt());
-        if (neighborW == -1) return Move.reproduce(Action.WEST, random.nextInt());
+        if (neighborN == -1) return Move.reproduce(Action.NORTH, neighborN);
+        if (neighborE == -1) return Move.reproduce(Action.EAST, neighborE);
+        if (neighborS == -1) return Move.reproduce(Action.SOUTH, neighborS);
+        if (neighborW == -1) return Move.reproduce(Action.WEST, neighborW);
         return Move.movement(Action.STAY_PUT);
     }
 
-    private Move moveToFoodOrRandom(boolean foodN, boolean foodE, boolean foodS, boolean foodW, int energyLeft) {
-        if (foodN) return Move.movement(Action.NORTH);
-        if (foodE) return Move.movement(Action.EAST);
-        if (foodS) return Move.movement(Action.SOUTH);
-        if (foodW) return Move.movement(Action.WEST);
+    private Move moveToFoodOrRandom(boolean foodN, boolean foodE, boolean foodS, boolean foodW,
+                                    int neighborN, int neighborE, int neighborS, int neighborW,
+                                    int energyLeft) {
+        if (foodN && neighborN == -1) return Move.movement(Action.NORTH);
+        if (foodE && neighborE == -1) return Move.movement(Action.EAST);
+        if (foodS && neighborS == -1) return Move.movement(Action.SOUTH);
+        if (foodW && neighborW == -1) return Move.movement(Action.WEST);
+
         if (energyLeft > v) {
-            // Move randomly if no food is nearby
-            int actionIndex = random.nextInt(Action.getNumActions());
-            Action actionChoice = Action.fromInt(actionIndex);
-            return Move.movement(actionChoice);
-        } else {
-            // Stay put if energy is low
-            return Move.movement(Action.STAY_PUT);
+            int[] possibleMoves = new int[4];
+            int count = 0;
+            if (neighborN == -1) possibleMoves[count++] = Action.NORTH.ordinal();
+            if (neighborE == -1) possibleMoves[count++] = Action.EAST.ordinal();
+            if (neighborS == -1) possibleMoves[count++] = Action.SOUTH.ordinal();
+            if (neighborW == -1) possibleMoves[count++] = Action.WEST.ordinal();
+
+            if (count > 0) {
+                int actionIndex = random.nextInt(count);
+                Action actionChoice = Action.fromInt(possibleMoves[actionIndex]);
+                return Move.movement(actionChoice);
+            }
         }
+        return Move.movement(Action.STAY_PUT);
     }
     @Override
     public int externalState() {
