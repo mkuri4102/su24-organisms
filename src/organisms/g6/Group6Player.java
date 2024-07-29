@@ -7,7 +7,7 @@ import organisms.OrganismsPlayer;
 import java.awt.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class G6Player implements OrganismsPlayer {
+public class Group6Player implements OrganismsPlayer {
     private OrganismsGame game;
     private int dna;
     private ThreadLocalRandom random;
