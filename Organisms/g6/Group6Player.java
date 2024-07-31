@@ -129,6 +129,6 @@ public class Group6Player implements OrganismsPlayer {
 
     @Override
     public int externalState() {
-        return 0;
+        return dna;
     }
 }
