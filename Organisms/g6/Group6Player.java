@@ -43,10 +43,10 @@ public class Group6Player implements OrganismsPlayer {
                      boolean foodS, boolean foodW, int neighborN, int neighborE,
                      int neighborS, int neighborW) {
         // Reproduction logic from Group4Player2
-        if (energyLeft > 300 && (foodN || foodE || foodS || foodW)) {
+        if (energyLeft > M/1.666667 && (foodN || foodE || foodS || foodW)) {
             //Reproduce if energy is sufficient and there is food around
             return reproduceOnFood(foodN, foodE, foodS, foodW, neighborN, neighborE, neighborS, neighborW);
-        } else if (energyLeft > 400) {
+        } else if (energyLeft > M/1.25) {
             // reproduce if no food is present but energy is high
             return reproduce(neighborN, neighborE, neighborS, neighborW);
         }
@@ -70,7 +70,7 @@ public class Group6Player implements OrganismsPlayer {
     }
     private boolean shouldStayPut(int foodHere, int energyLeft) {
         // Stay put if there's food here and energy is not full
-        return foodHere > 0 && energyLeft < M - u;
+        return foodHere > 0 && energyLeft < v*3 ;
     }
 
     private Move reproduce(int neighborN, int neighborE, int neighborS, int neighborW) {
@@ -104,7 +104,7 @@ public class Group6Player implements OrganismsPlayer {
         }
 
         // If no food is found nearby for a few moves, prioritize staying put to save energy
-        if (movesSinceFood > 2) {
+        if (movesSinceFood > 1) {
             return Move.movement(Action.STAY_PUT);
         }
 
